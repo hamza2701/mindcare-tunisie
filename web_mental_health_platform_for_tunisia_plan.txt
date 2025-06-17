@@ -1,0 +1,118 @@
+
+Project Title: Web-Based Mental Health Platform for Tunisia
+Date: 2025-06-16
+
+Overview:
+---------
+A mental health platform for Tunisia that connects patients and licensed mental health professionals. 
+The platform includes secure booking, video sessions, journaling tools, mood tracking, AI chatbot for support, and patient-doctor interaction.
+
+Main Modules:
+-------------
+1. User Authentication & Roles
+   - Patients and Doctors (Therapists)
+   - Firebase Authentication (Email/Google/Apple)
+
+2. Doctor Module
+   - Create/edit profile (bio, certifications, specialties)
+   - Set availability and pricing
+   - Manage appointments
+   - Secure chat/video with patients
+   - View shared journal/mood data from patients
+   - Earnings dashboard
+
+3. Patient Module
+   - Search and view therapist profiles
+   - Book sessions
+   - Mood tracking (daily entries with scale/emojis)
+   - Journaling (text/voice input, optional sharing)
+   - Secure chat/video with therapist
+   - Rate sessions anonymously
+   - View emotional trends over time
+
+4. AI Chatbot
+   - Emotional support with GPT-4 API
+   - Guided journaling and CBT-style reflection
+   - Pre-session summary collection
+   - Onboarding and feature explanations
+   - Derja/French/Arabic language support
+
+5. Booking & Calendar
+   - Therapist sets time slots
+   - Patients book available slots
+   - Calendar sync (optional)
+   - Notifications and reminders
+
+6. Payments Integration
+   - Stripe for international users
+   - Paymee for Tunisian payments
+   - Commission-based (e.g. 10–20% per session)
+   - Subscription options for patients or therapists
+
+7. Communication
+   - Encrypted real-time chat (Firebase or Supabase)
+   - Video calls (Twilio/WebRTC)
+   - Voice message support (optional)
+
+8. Admin Panel (future extension)
+   - Manage flagged accounts or abuse reports
+   - Verify therapist credentials
+   - View platform analytics
+
+Use Cases:
+----------
+- As a patient, I can register and log in to the app.
+- As a patient, I can search for and book therapy sessions.
+- As a patient, I can log my mood and write journal entries.
+- As a patient, I can chat or video call with my therapist securely.
+- As a patient, I can talk to a chatbot for emotional support.
+- As a therapist, I can create a profile and list my services.
+- As a therapist, I can set availability and session fees.
+- As a therapist, I can receive bookings and chat with patients.
+- As a therapist, I can view shared journal/mood data.
+- As a system, I can notify users of upcoming appointments.
+
+Technologies:
+-------------
+Frontend:
+- Next.js (React framework for SSR and frontend rendering)
+- Tailwind CSS for UI styling
+
+Backend:
+- Express.js (REST API server)
+- Supabase (PostgreSQL DB, authentication, file storage, and real-time listeners)
+- Payments: Stripe API + Paymee Tunisia
+- Chat & Video: Firebase Realtime DB + Twilio or WebRTC
+
+AI:
+- GPT-4 API (for chatbot)
+- Whisper API or Google Speech-to-Text (for voice input)
+- Prompt tuning for Derja/French empathy and CBT style
+
+Security:
+- End-to-end encryption for messages
+- Role-based access control
+- Secure Firestore rules and validation
+
+MVP Development Plan (Web Only):
+---------------------
+Phase 1: Core Auth & Booking
+- Implement user roles
+- Therapist profiles and availability
+- Basic booking + patient dashboard
+
+Phase 2: Communication Tools
+- Secure chat system
+- Add Twilio for video sessions
+- Add journaling + mood tracking
+
+Phase 3: AI Integration
+- GPT chatbot for journaling/emotional support
+- Speech-to-text for voice input
+- Share chatbot convo with therapist
+
+Phase 4: Payments and Scaling
+- Integrate Stripe and Paymee
+- Add therapist earnings dashboard
+- Improve notifications and app polish
+

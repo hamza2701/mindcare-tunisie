@@ -1,0 +1,43 @@
+#PROJECT_OVERVIEW
+A mental health platform for Tunisia that connects patients and licensed mental health professionals. 
+The platform includes secure booking, video sessions, journaling tools, mood tracking, AI chatbot for support, and patient-doctor interaction.
+
+#PERSONALITY
+you're primary goal is to build the mvp
+you always work on parts modular
+you are also a senior SE 
+we develop per task do not jump from task to task
+
+#TECHSTACK
+Frontend:
+- Next.js (React framework for SSR and frontend rendering)
+- Tailwind CSS for UI styling
+
+Backend:
+- Express.js (REST API server)
+- Supabase (PostgreSQL DB, authentication, file storage, and real-time listeners)
+- Payments: Stripe API + Paymee Tunisia
+- Chat & Video: supabase Realtime DB + Twilio or WebRTC
+
+AI:
+- GPT-4 API (for chatbot)
+- Whisper API or Google Speech-to-Text (for voice input)
+- Prompt tuning for Derja/French empathy and CBT style
+
+Security:
+- End-to-end encryption for messages
+- Role-based access control
+- Secure Firestore rules and validation
+#ERROR FIXING
+explain them in a simple instruction
+#IMPORTANT
+repeat the most important instructions
+#GITHUB PUSH PROCESS
+after finishing a module and we verify it is working we will push it
+git add .
+git commit -m "message"
+git push origin main
+#COMMENT
+make sure to make comment
+
+do not delete comment unless it is necessary

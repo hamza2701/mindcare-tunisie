@@ -1,0 +1,180 @@
+Frontend Development Plan
+=======================
+
+1. LAYOUT & CORE STRUCTURE
+-------------------------
+a) Layouts
+   ⭕ MainLayout (navigation, footer, common elements)
+   ⭕ DashboardLayout (sidebar, header, content area)
+   ✓ AuthLayout (for login/signup pages)
+
+b) Navigation
+   ⭕ Navbar (authenticated & public)
+   ⭕ Sidebar (dashboard navigation)
+   ⭕ Mobile responsive menu
+   ⭕ Breadcrumbs
+
+2. AUTHENTICATION FLOWS
+-------------------------------------------
+✓ Login page
+✓ Signup (Patient/Therapist)
+✓ Password Reset
+✓ Email Verification
+⭕ Auth state management with Supabase
+⭕ Protected routes setup
+⭕ Role-based access control
+
+3. PATIENT DASHBOARD
+-------------------
+a) Main Dashboard
+   ⭕ Overview stats
+   ⭕ Upcoming appointments
+   ⭕ Recent journal entries
+   ⭕ Mood tracking summary
+   ⭕ Quick actions
+
+b) Therapist Search & Booking
+   ⭕ Search interface
+   ⭕ Therapist listing
+   ⭕ Therapist profile view
+   ⭕ Booking calendar
+   ⭕ Payment integration UI
+
+c) Journal & Mood Tracking
+   ⭕ Journal entry creation
+   ⭕ Mood logging interface
+   ⭕ History view
+   ⭕ Analytics/trends
+   ⭕ Share controls
+
+d) Communication Hub
+   ⭕ Chat interface
+   ⭕ Video call preparation UI
+   ⭕ Message history
+   ⭕ File/media sharing
+
+4. THERAPIST DASHBOARD
+---------------------
+a) Main Dashboard
+   ⭕ Daily schedule
+   ⭕ Patient overview
+   ⭕ Earnings summary
+   ⭕ Notifications center
+
+b) Profile Management
+   ⭕ Professional info
+   ⭕ Availability calendar
+   ⭕ Service pricing
+   ⭕ Credentials upload
+
+c) Patient Management
+   ⭕ Patient list
+   ⭕ Individual patient view
+   ⭕ Shared journal access
+   ⭕ Session notes
+
+d) Session Management
+   ⭕ Upcoming sessions
+   ⭕ Session history
+   ⭕ Video call interface
+   ⭕ Chat system
+
+5. CHATBOT INTERFACE
+-------------------
+⭕ Chat window UI
+⭕ Message threading
+⭕ Voice input interface
+⭕ Emotion recognition UI
+⭕ Session summary view
+
+6. SHARED COMPONENTS
+-------------------
+✓ UI Component Library (shadcn/ui)
+✓ Theme toggle
+✓ Language toggle
+⭕ Calendar component
+⭕ Chat/messaging components
+⭕ Video call interface
+⭕ File upload/preview
+⭕ Notification system
+⭕ Loading states
+⭕ Error boundaries
+⭕ Modal system
+✓ Toast notifications
+
+7. RESPONSIVE DESIGN
+-------------------
+✓ Mobile detection hooks
+⭕ Tablet optimization
+⭕ Desktop enhancement
+⭕ Touch-friendly interfaces
+
+8. PERFORMANCE OPTIMIZATION
+--------------------------
+⭕ Lazy loading setup
+⭕ Image optimization
+⭕ Component code splitting
+⭕ Route prefetching
+⭕ Performance monitoring
+
+9. TESTING STRATEGY
+------------------
+⭕ Unit tests for components
+⭕ Integration tests
+⭕ E2E testing
+⭕ Accessibility testing
+⭕ Cross-browser testing
+
+DEVELOPMENT ORDER:
+-----------------
+Phase 1: Core Structure [IN PROGRESS]
+1. ⭕ Layout system
+2. ⭕ Navigation
+3. ⭕ Dashboard shells
+
+Phase 2: Patient Features [NOT STARTED]
+1. ⭕ Patient dashboard
+2. ⭕ Therapist search
+3. ⭕ Booking system
+4. ⭕ Journal/mood tracking
+
+Phase 3: Therapist Features [NOT STARTED]
+1. ⭕ Therapist dashboard
+2. ⭕ Profile management
+3. ⭕ Patient management
+4. ⭕ Availability/calendar
+
+Phase 4: Communication [NOT STARTED]
+1. ⭕ Chat system
+2. ⭕ Video calls
+3. ⭕ File sharing
+4. ⭕ Notifications
+
+Phase 5: AI Integration [NOT STARTED]
+1. ⭕ Chatbot interface
+2. ⭕ Voice input
+3. ⭕ Analytics dashboard
+
+Phase 6: Polish & Optimization [NOT STARTED]
+1. ⭕ Performance optimization
+2. ⭕ Testing
+3. ⭕ Bug fixes
+4. ⭕ UX improvements
+
+TECH STACK DETAILS:
+------------------
+✓ Next.js 13+ (App Router)
+✓ Tailwind CSS
+✓ shadcn/ui components
+✓ TypeScript
+⭕ Supabase Client
+⭕ React Query/SWR
+⭕ Zustand (state management)
+✓ React Hook Form
+✓ Zod (validation)
+⭕ WebRTC/Twilio
+⭕ Jest/React Testing Library
+
+Legend:
+✓ - Completed
+⭕ - Not Started/In Progress 
