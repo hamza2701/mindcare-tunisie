@@ -6,39 +6,136 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Heart, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 import { ThemeToggle } from "./theme-toggle"
+import { supabase } from "@/lib/supabase"
+import { AuthService } from "@/services/auth.service"
 
 export default function VerifyEmailPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [isVerifying, setIsVerifying] = useState(true)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState("")
   const [isResending, setIsResending] = useState(false)
 
   useEffect(() => {
-    // Simulate email verification process
-    const timer = setTimeout(() => {
-      // In real app, check URL params for verification token
-      const urlParams = new URLSearchParams(window.location.search)
-      const token = urlParams.get("token")
+    const handleEmailVerification = async () => {
+      try {
+        // Get email first as we'll need it throughout the function
+        const email = searchParams.get('email') || localStorage.getItem('signupEmail')
 
-      if (token === "valid-token") {
+        // Check if we're on the initial load after registration (no params)
+        const hasNoParams = !window.location.hash && !searchParams.get('token_hash') && !searchParams.get('type')
+        
+        if (hasNoParams && email) {
+          setIsVerifying(false)
+          setError("Un lien de vérification a été envoyé à votre adresse e-mail. Veuillez vérifier votre boîte de réception.")
+          return
+        }
+
+        // Check for error in hash
+        const hashParams = new URLSearchParams(window.location.hash.replace('#', ''))
+        const errorCode = hashParams.get('error_code')
+        const errorDescription = hashParams.get('error_description')
+
+        if (errorCode) {
+          console.error('Error in hash:', { errorCode, errorDescription })
+          if (errorCode === 'otp_expired') {
+            setError("Le lien de vérification a expiré. Veuillez demander un nouveau lien.")
+          } else {
+            setError(errorDescription?.replace(/\+/g, ' ') || "Une erreur est survenue lors de la vérification")
+          }
+          setIsVerifying(false)
+          return
+        }
+
+        // Check if we have a session
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session) {
+          console.log('User is already verified and has a session')
+          setIsSuccess(true)
+          setIsVerifying(false)
+          return
+        }
+
+        // Get verification parameters
+        const token_hash = searchParams.get('token_hash')
+        const type = searchParams.get('type')
+
+        if (!token_hash || !type || !email) {
+          console.error('Missing verification parameters:', { token_hash, type, email })
+          setError("Le lien de vérification est invalide. Veuillez demander un nouveau lien.")
+          setIsVerifying(false)
+          return
+        }
+
+        // Verify the email
+        const { error: verificationError } = await supabase.auth.verifyOtp({
+          email,
+          token: token_hash,
+          type: 'signup'
+        })
+
+        if (verificationError) {
+          console.error("Email verification error:", verificationError)
+          if (verificationError.message.includes('expired')) {
+            setError("Le lien de vérification a expiré. Veuillez demander un nouveau lien.")
+          } else {
+            setError("Le lien de vérification est invalide. Veuillez demander un nouveau lien.")
+          }
+          setIsVerifying(false)
+          return
+        }
+
         setIsSuccess(true)
-      } else {
-        setError("Le lien de vérification est invalide ou a expiré")
+        setIsVerifying(false)
+      } catch (err) {
+        console.error("Error during email verification:", err)
+        setError("Une erreur est survenue lors de la vérification de l'email")
+        setIsVerifying(false)
       }
-      setIsVerifying(false)
-    }, 2000)
+    }
 
-    return () => clearTimeout(timer)
-  }, [])
+    handleEmailVerification()
+  }, [searchParams, router])
 
   const handleResendEmail = async () => {
-    setIsResending(true)
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      setIsResending(true)
+      setError("")
+
+      // Get the email from URL, hash, or localStorage
+      const hashParams = new URLSearchParams(window.location.hash.replace('#', ''))
+      const email = searchParams.get('email') || hashParams.get('email') || localStorage.getItem('signupEmail')
+      
+      if (!email) {
+        setError("Impossible de récupérer votre adresse email. Veuillez réessayer de vous inscrire.")
+        return
+      }
+
+      // Resend verification email
+      const { error: resendError } = await supabase.auth.resend({
+        type: "signup",
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/verify-email`
+        }
+      })
+
+      if (resendError) {
+        throw resendError
+      }
+
+      // Show success message
+      setError("Un nouveau lien de vérification a été envoyé à votre adresse email. Veuillez vérifier votre boîte de réception.")
+    } catch (err) {
+      console.error("Error resending verification email:", err)
+      setError("Une erreur est survenue lors de l'envoi du nouvel email")
+    } finally {
       setIsResending(false)
-      // Show success message or handle error
-    }, 1500)
+    }
   }
 
   if (isVerifying) {
@@ -132,23 +229,35 @@ export default function VerifyEmailPage() {
           <Card>
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
-                <Heart className="h-12 w-12 text-emerald-600" />
+                {error.includes("a été envoyé") ? (
+                  <CheckCircle className="h-12 w-12 text-emerald-600" />
+                ) : (
+                  <AlertCircle className="h-12 w-12 text-red-600" />
+                )}
               </div>
-              <CardTitle className="text-2xl">Vérification échouée</CardTitle>
-              <CardDescription>Nous n'avons pas pu vérifier votre adresse e-mail</CardDescription>
+              <CardTitle className="text-2xl">
+                {error.includes("a été envoyé") ? "Vérification en attente" : "Vérification échouée"}
+              </CardTitle>
+              <CardDescription>
+                {error.includes("a été envoyé") ? "Veuillez vérifier votre boîte de réception" : "Nous n'avons pas pu verifier votre adresse e-mail"}
+              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-4">
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+              <Alert className={error.includes("a été envoyé") ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200" : "bg-red-50 dark:bg-red-950/20 border-red-200"}>
+                {error.includes("a été envoyé") ? (
+                  <CheckCircle className="h-4 w-4 text-emerald-600" />
+                ) : (
+                  <AlertCircle className="h-4 w-4 text-red-600" />
+                )}
+                <AlertDescription>
+                  {error}
+                </AlertDescription>
+              </Alert>
 
-              <div className="text-center space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Le lien de vérification peut avoir expiré. Vous pouvez demander un nouveau lien de vérification.
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground text-center">
+                  Si vous n'avez pas reçu l'e-mail, vérifiez votre dossier spam ou demandez un nouveau lien.
                 </p>
 
                 <Button
